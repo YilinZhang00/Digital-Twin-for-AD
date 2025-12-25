@@ -1,0 +1,3 @@
+Data were obtained from the Alzheimer’s Disease Neuroimaging Initiative (ADNI) database. 
+
+https://adni.loni.usc.edu/
