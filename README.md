@@ -202,7 +202,7 @@ Please update the BibTeX entry with the final publication details once available
 
 ## Acknowledgements
 
-This research was supported by the National Institute for Health and Care Research (NIHR). Rahman Attar is supported by the NIHR Southampton Biomedical Research Centre. Sofia Michopoulou is supported by an NIHR Senior Clinical Practitioner Award.
+This research was supported by the National Institute for Health and Care Research (NIHR).
 
 ## License
 
