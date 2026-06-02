@@ -203,7 +203,3 @@ Please update the BibTeX entry with the final publication details once available
 ## Acknowledgements
 
 This research was supported by the National Institute for Health and Care Research (NIHR).
-
-## License
-
-Please add an appropriate license before public release. If no license is provided, standard copyright restrictions apply.
