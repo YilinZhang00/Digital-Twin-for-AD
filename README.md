@@ -1,185 +1,166 @@
 # Transition-Based Digital Twin Modelling for Alzheimer's Disease
 
-This repository contains the code for the study:
+This repository contains the code used for the study:
 
 **Transition-Based Digital Twin Modelling for Alzheimer's Disease under Sparse Longitudinal Data**
 
-The project develops a personalised digital twin framework for Alzheimer's disease (AD) progression modelling using sparse and irregular longitudinal multimodal data. The framework combines transition-based prediction and sequence-based trajectory forecasting to support cognitive score prediction, diagnosis classification, uncertainty-aware forecasting, and subject-level what-if analysis.
+The study develops a personalised digital twin framework for Alzheimer's disease (AD) progression modelling using sparse longitudinal multimodal data from the Alzheimer's Disease Neuroimaging Initiative (ADNI). The framework compares a transition-based MLP model with a sequence-based LSTM model for cognitive score prediction, diagnosis classification, uncertainty-aware forecasting, and subject-level what-if analysis.
 
-## Overview
+## Repository Structure
 
-Alzheimer's disease progression is highly heterogeneous and is often observed through sparse, irregular follow-up visits. Many existing machine learning approaches focus on static classification or cohort-level risk prediction, which limits their usefulness for individualised monitoring and scenario-based analysis.
+The current repository contains the following files:
 
-This study proposes a hybrid digital twin framework that models disease progression at the subject level. The framework includes:
+```text
+.
+├── README.md        # Project description and usage guide
+├── data.txt         # Data description or processed data information
+├── feature.ipynb    # Feature preprocessing and feature selection
+├── lstm.ipynb       # BiLSTM-Attention sequence modelling branch
+└── mlp.ipynb        # Transition-based MLP branch
+```
 
-- a transition-based MLP branch for short-term prediction between adjacent visits;
-- a BiLSTM-Attention branch for longer-range temporal forecasting;
-- uncertainty estimation using Monte Carlo dropout;
-- patient-specific what-if trajectory analysis under controlled perturbations of clinically meaningful variables.
+## Project Overview
 
-The main finding is that, under sparse and irregular ADNI follow-up conditions, local transition modelling can be more data-efficient and robust than relying only on sequence-based temporal models.
+Alzheimer's disease progression is heterogeneous and is often observed through sparse and irregular follow-up visits. Many existing machine learning approaches focus on static classification or cohort-level risk estimation, which limits their ability to support individualised monitoring.
+
+This project proposes a digital twin framework that supports subject-level prediction and scenario-based analysis. The framework includes two complementary modelling branches:
+
+1. **Transition-based MLP branch**  
+   This branch models adjacent clinical transitions, such as `t -> t + 6 months`. It uses the current visit's clinical, cognitive, and imaging-derived features to predict the next visit's MMSE score and diagnosis category.
+
+2. **BiLSTM-Attention branch**  
+   This branch models longer-range temporal dependencies across aligned follow-up visits. It supports sequence-based forecasting, predictive uncertainty estimation, and patient-level what-if trajectory analysis.
+
+The main finding is that, under sparse and irregular ADNI follow-up conditions, local transition modelling can be more data-efficient and robust than relying only on sequence-based temporal modelling.
 
 ## Dataset
 
 The study uses data from the Alzheimer's Disease Neuroimaging Initiative (ADNI), including:
 
-- cognitive assessments;
 - clinical variables;
+- cognitive assessments;
 - diagnosis labels;
-- MRI-derived structural phenotypes from FreeSurfer.
+- MRI-derived structural phenotypes.
 
-After preprocessing, the working dataset contained 2,801 records from 760 subjects, aligned to six-month follow-up intervals from baseline to 60 months.
+The main prediction targets are:
 
-Targets used in the study:
+- **MMSE**: Mini-Mental State Examination score for regression;
+- **DX**: diagnosis category for classification:
+  - CN: cognitively normal;
+  - MCI: mild cognitive impairment;
+  - AD: Alzheimer's disease.
 
-- **MMSE** for cognitive score regression;
-- **DX** for three-class diagnosis classification:
-  - cognitively normal (CN);
-  - mild cognitive impairment (MCI);
-  - Alzheimer's disease (AD).
+ADNI data are not included in this repository. Users must apply for access through the official ADNI data access process and prepare the data according to the preprocessing pipeline used in the notebooks.
 
-Please note that ADNI data are not included in this repository. Users must obtain access through the official ADNI data access process and prepare the data according to the preprocessing steps described in the paper.
+## File Description
 
-## Method
+### `data.txt`
 
-The proposed framework contains two complementary branches.
+This file provides information about the dataset used in the study. It may include data source notes, variable descriptions, or processed data instructions.
 
-### 1. Transition-Based MLP Branch
+### `feature.ipynb`
 
-The MLP branch models adjacent visit transitions, such as:
+This notebook is used for feature processing and feature selection. It includes steps such as:
 
-```text
-t -> t + 6 months
-```
+- loading and cleaning longitudinal ADNI data;
+- handling clinical, cognitive, and imaging-derived variables;
+- preparing static and dynamic features;
+- applying feature selection, such as mRMR;
+- generating the feature sets used by the prediction models.
 
-For each adjacent visit pair, the input contains the current visit's clinical, cognitive, and imaging features, and the targets are the next visit's MMSE and DX.
+### `mlp.ipynb`
 
-This branch is designed for robust short-horizon prediction under sparse longitudinal data. Feature selection is performed using minimum Redundancy Maximum Relevance (mRMR).
+This notebook implements the transition-based MLP branch. It includes:
 
-### 2. BiLSTM-Attention Branch
+- adjacent visit-pair construction;
+- MMSE regression;
+- diagnosis classification;
+- model training and validation;
+- evaluation using RMSE, MAE, accuracy, AUC, and macro-F1;
+- comparison with conventional classifiers where applicable.
 
-The BiLSTM-Attention branch models longer-range longitudinal dependencies across aligned follow-up visits. It uses observations up to month 18 to predict the 24-month endpoint.
+### `lstm.ipynb`
 
-This branch supports:
+This notebook implements the sequence-based BiLSTM-Attention branch. It includes:
 
-- sequence-based MMSE forecasting;
-- diagnosis prediction;
-- predictive uncertainty estimation;
-- subject-specific what-if trajectory simulation.
-
-Although this branch achieved lower point-prediction performance than the MLP branch, it provides temporally coherent trajectories and uncertainty-aware analysis, which are important for the digital twin interpretation.
+- construction of aligned subject-level longitudinal sequences;
+- BiLSTM-Attention model training;
+- MMSE forecasting;
+- diagnosis classification;
+- Monte Carlo dropout for uncertainty estimation;
+- subject-level trajectory forecasting and what-if analysis.
 
 ## Main Results
 
-On the held-out test set, the transition-based MLP branch outperformed the BiLSTM-Attention branch.
+The transition-based MLP branch achieved stronger held-out test performance than the BiLSTM-Attention branch.
 
 | Model | RMSE | MAE | ACC | AUC | Macro-F1 |
 |---|---:|---:|---:|---:|---:|
 | MLP | 2.149 | 1.529 | 0.906 | 0.976 | 0.908 |
 | BiLSTM-Attention | 2.687 | 1.926 | 0.806 | 0.928 | 0.798 |
 
-These results suggest that local transition modelling may be more suitable than full sequence modelling when longitudinal clinical data are sparse, irregular, and limited in sample size.
+These results suggest that, when longitudinal clinical data are sparse and irregular, modelling local transitions between adjacent visits may provide a more robust and data-efficient strategy than learning full long-range temporal sequences.
 
-## Repository Structure
+## How to Use
 
-A suggested structure for this repository is:
-
-```text
-.
-├── README.md
-├── requirements.txt
-├── data/
-│   └── README.md
-├── src/
-│   ├── preprocessing/
-│   ├── models/
-│   ├── training/
-│   ├── evaluation/
-│   └── visualisation/
-├── configs/
-├── results/
-└── figures/
-```
-
-Depending on the final code organisation, the exact file structure may differ.
-
-## Installation
-
-Clone the repository:
+### 1. Clone the repository
 
 ```bash
 git clone https://github.com/YilinZhang00/Digital-Twin-for-AD.git
 cd Digital-Twin-for-AD
 ```
 
-Create a virtual environment:
+### 2. Create an environment
+
+For example, using Conda:
 
 ```bash
 conda create -n ad-digital-twin python=3.10
 conda activate ad-digital-twin
 ```
 
-Install dependencies:
+Install the required Python packages manually according to the notebook imports. A `requirements.txt` file can be added later for easier installation.
+
+Common packages may include:
 
 ```bash
-pip install -r requirements.txt
+pip install numpy pandas scikit-learn matplotlib seaborn torch
 ```
 
-## Usage
+Additional packages may be required depending on the feature selection and visualisation steps.
 
-### 1. Prepare the data
+### 3. Prepare the data
 
-Download the required ADNI data through the official ADNI portal. Then preprocess the clinical, cognitive, and MRI-derived features into the format expected by the training scripts.
+Download the required ADNI data through the official ADNI portal. Then prepare the data according to the format expected by the notebooks.
 
 The processed data should include:
 
 - subject identifier;
-- visit month;
+- visit time or visit month;
 - clinical and cognitive variables;
 - MRI-derived structural features;
 - MMSE target;
-- DX diagnosis target.
+- diagnosis target.
 
-### 2. Train the transition-based MLP branch
+### 4. Run the notebooks
 
-Example:
+The suggested order is:
 
-```bash
-python src/training/train_mlp_transition.py --config configs/mlp_transition.yaml
+```text
+1. feature.ipynb
+2. mlp.ipynb
+3. lstm.ipynb
 ```
 
-### 3. Train the BiLSTM-Attention branch
-
-Example:
-
-```bash
-python src/training/train_bilstm_attention.py --config configs/bilstm_attention.yaml
-```
-
-### 4. Evaluate the models
-
-Example:
-
-```bash
-python src/evaluation/evaluate_models.py --config configs/evaluation.yaml
-```
-
-### 5. Run uncertainty-aware and what-if analysis
-
-Example:
-
-```bash
-python src/evaluation/run_what_if_analysis.py --config configs/what_if.yaml
-```
-
-The command names above are templates and should be adapted to the final script names in the repository.
+Run `feature.ipynb` first to prepare the feature set. Then run `mlp.ipynb` for the transition-based branch and `lstm.ipynb` for the sequence-based branch.
 
 ## Outputs
 
-The framework can generate:
+The notebooks can generate:
 
-- MMSE regression results;
+- MMSE prediction results;
 - diagnosis classification results;
+- feature selection results;
 - ROC curves;
 - residual plots;
 - reliability plots;
@@ -189,17 +170,17 @@ The framework can generate:
 
 ## Key Findings
 
-- Transition-based modelling achieved stronger predictive performance than sequence-based modelling in the current sparse ADNI setting.
-- Feature selection using mRMR substantially improved both regression and classification performance.
-- The sequence-based branch remained useful for uncertainty-aware forecasting and subject-level scenario analysis.
-- The results highlight that temporal model design should match the structure and limitations of real-world clinical data.
+- The transition-based MLP branch achieved the strongest point-prediction performance.
+- mRMR feature selection improved both regression and classification results.
+- The BiLSTM-Attention branch remained useful for uncertainty-aware forecasting and subject-level what-if analysis.
+- The results show that temporal modelling strategies should match the sparsity and irregularity of real-world clinical data.
 
 ## Limitations
 
 This study has several limitations:
 
 - it uses a single longitudinal cohort;
-- the sequence branch depends on interpolation for irregular follow-up;
+- the sequence-based branch depends on interpolation for irregular follow-up;
 - what-if analysis is observational rather than causal;
 - the MLP and BiLSTM branches differ in prediction horizon and effective sample construction;
 - external validation on independent cohorts is needed.
@@ -217,7 +198,7 @@ If you use this repository, please cite the associated paper:
 }
 ```
 
-Please update the BibTeX entry with the final proceedings information once available.
+Please update the BibTeX entry with the final publication details once available.
 
 ## Acknowledgements
 
@@ -225,4 +206,4 @@ This research was supported by the National Institute for Health and Care Resear
 
 ## License
 
-Please add the appropriate license for the repository before public release. If no license is provided, the default copyright restrictions apply.
+Please add an appropriate license before public release. If no license is provided, standard copyright restrictions apply.
