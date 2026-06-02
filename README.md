@@ -115,7 +115,7 @@ cd Digital-Twin-for-AD
 For example, using Conda:
 
 ```bash
-conda create -n ad-digital-twin python=3.10
+conda create -n ad-digital-twin python=3.13
 conda activate ad-digital-twin
 ```
 
