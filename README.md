@@ -185,19 +185,6 @@ This study has several limitations:
 - the MLP and BiLSTM branches differ in prediction horizon and effective sample construction;
 - external validation on independent cohorts is needed.
 
-## Citation
-
-If you use this repository, please cite the associated paper:
-
-```bibtex
-@inproceedings{huang2026transition,
-  title={Transition-Based Digital Twin Modelling for Alzheimer's Disease under Sparse Longitudinal Data},
-  author={Huang, Yinyu and Zhang, Yilin and Michopoulou, Sofia and Kipps, Christopher and Attar, Rahman},
-  booktitle={International Conference on AI in Healthcare},
-  year={2026}
-}
-```
-
 Please update the BibTeX entry with the final publication details once available.
 
 ## Acknowledgements
