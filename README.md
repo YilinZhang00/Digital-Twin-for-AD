@@ -35,7 +35,7 @@ The main finding is that, under sparse and irregular ADNI follow-up conditions, 
 
 ## Dataset
 
-The study uses data from the Alzheimer's Disease Neuroimaging Initiative (ADNI), including:
+The study uses data from the [Alzheimer's Disease Neuroimaging Initiative (ADNI)](https://adni.loni.usc.edu), including:
 
 - clinical variables;
 - cognitive assessments;
