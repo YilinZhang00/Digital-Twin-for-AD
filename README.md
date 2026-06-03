@@ -127,7 +127,7 @@ Common packages may include:
 pip install numpy pandas scikit-learn matplotlib seaborn torch
 ```
 
-Additional packages may be required depending on the feature selection and visualisation steps.
+Additional packages may be required depending on the feature selection and visualisation steps, see requirements.
 
 ### 3. Prepare the data
 
