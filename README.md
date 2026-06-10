@@ -1,4 +1,3 @@
-````markdown
 # Transition-Based Digital Twin Modelling for Alzheimer's Disease
 
 This repository contains the code used for the study:
