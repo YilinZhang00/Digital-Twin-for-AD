@@ -222,5 +222,3 @@ This research was supported by the National Institute for Health and Care Resear
 
 The authors have no competing interests to declare that are relevant to the content of this article.
 
-```
-```
