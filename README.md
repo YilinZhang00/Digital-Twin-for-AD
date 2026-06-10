@@ -4,7 +4,7 @@ This repository contains the code used for the study:
 
 **Transition-Based Digital Twin Modelling for Alzheimer's Disease under Sparse Longitudinal Data**
 
-The full paper has been accepted by the **International Conference on AI in Healthcare (AIiH)**.  
+The full paper has been accepted by the **International Conference on AI in Healthcare 2026 (AIiH 2026)**.  
 A preprint is available on arXiv: [Transition-Based Digital Twin Modelling for Alzheimer's Disease under Sparse Longitudinal Data](https://arxiv.org/abs/2606.09671).
 
 The study develops a personalised digital twin framework for Alzheimer's disease (AD) progression modelling using sparse longitudinal multimodal data from the Alzheimer's Disease Neuroimaging Initiative (ADNI). The framework compares a transition-based MLP model with a sequence-based BiLSTM-Attention model for cognitive score prediction, diagnosis classification, uncertainty-aware forecasting, and subject-level what-if analysis.
